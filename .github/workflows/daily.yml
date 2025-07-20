@@ -1,0 +1,29 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Setiap hari jam 00:00 UTC (07:00 WIB)
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Buat/update file log
+        run: |
+          echo "✅ Update: $(date -u)" >> daily.md
+
+      - name: Setup Git
+        run: |
+          git config user.name "jimmyjr29"
+          git config user.email "fiverjims29@gmail.com"
+
+      - name: Commit dan push
+        run: |
+          git add .
+          git commit -m "🔄 Daily commit: $(date -u)" || echo "No changes to commit"
+          git push
